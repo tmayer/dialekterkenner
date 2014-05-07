@@ -1,0 +1,169 @@
+.questlink {
+    cursor: pointer;
+}
+
+#states path {
+  stroke: #000;
+}
+
+path.arc {
+  pointer-events: none;
+  fill: none;
+  stroke: #000;
+  display: none;
+}
+
+path.cell {
+  fill: none;
+  pointer-events: none;
+}
+
+circle {
+  fill: steelblue;
+  fill-opacity: .8;
+  stroke: #fff;
+}
+
+#cells.voronoi path.cell {
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+#cells g:hover path.arc {
+  display: inherit;
+}
+
+.poly:hover {
+    stroke: steelblue;
+    stroke-width: 2;
+}
+
+#tt {position:absolute; display:block;}
+#ttcont {display:block; padding:1px 1px 1px 1px; margin-left:1px; background:#666; color:#FFF}
+
+body {
+  padding: 0;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  font-size: 11pt;
+  color: #494949;
+  background: #d37e7e url(../img/body.png) repeat-x 50% 0;
+}
+
+#wrapper {
+  margin-top: 23pt;
+}
+
+a {
+  text-decoration: none;
+  color: #943131;
+}
+
+#header {
+  position: absolute;
+  top: 15px;
+  left: 45px;
+  color: #ffffff;
+  font-weight: normal;
+  font-size: 23pt;
+  margin-left: 24px;
+  margin-top: 20px;
+  text-shadow: #d0d0d0 0px 1px 3px;
+}
+
+
+fieldset {
+  
+  box-shadow:6px 6px 4px 1px #505050;
+  border: thin solid black;
+  background-color: white;
+}
+
+#formular {
+  float: left;
+  width: 310px;
+  margin-left: 10px;
+  margin-right: 20px;
+  /*margin-top: 45px;*/
+  
+}
+
+#alerttext {
+  height: 10px;
+  color: red;
+  margin-top: -7px;
+}
+
+#infotext {
+  padding-left: 15px;
+  margin-right: 13px;
+  width: 780px;
+}
+
+legend {
+  font-size: 14pt;
+}
+
+#bin{
+  height: 10px;
+  margin-top: 5px;
+}
+
+#question {
+  height: 170px;
+  text-align: justify;
+  
+}
+
+#information {
+  width: 490px;
+  margin-top: 10px;
+  margin-left: 300px;
+  text-align: right;
+  font-size:9pt;
+  padding: 3px;
+}
+
+
+@media print {
+  html, body {
+    height: auto;
+  }
+
+  #map {
+    height: 650px;
+  }
+}
+
+/* Now we add the backgrounds for the main content shading */
+
+#center #squeeze {
+  background: #d68a8b url(../img/bg-content.png) repeat-x 50% 0;
+  position: relative;
+  margin-left: 20px;
+  margin-top: 80px;
+  width: 866px;
+}
+
+#center .right-corner {
+  background: transparent url(../img/bg-content-right.png) no-repeat 100% 0;
+  position: relative;
+  left: 10px;
+}
+
+#center .right-corner .left-corner {
+  padding: 60px 25px 5em 35px;
+  background: transparent url(../img/bg-content-left.png) no-repeat 0 0;
+  margin-left: -10px;
+  position: relative;
+  left: -10px;
+  min-height: 400px;
+}
+
+#contents {
+  background-color: #c4d59d;
+  padding: 6px;
+  padding-right: 8px;
+  border: solid thin black;
+  box-shadow:0px 0px 6px 4px #000;
+  min-height: 800px;
+}
