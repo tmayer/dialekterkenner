@@ -5,7 +5,7 @@ var quest = new Array(7);
   quest[0] = "Ein Freund erzählt Ihnen, dass seine Tochter ein Kind erwartet. Sie wissen das jedoch schon. Können Sie in dieser Situation sagen: <br> 'Sie hat mir's schon erzählt.'"; 
   quest[1] = "<img src='img/beten.jpg' width='160'><br>Können Sie zur Beschreibung dieses Bildes folgenden Satz sagen: <br> 'Das Kind ist am beten.'";
   quest[2] = "Zufällig kommt ihr Freund Otto vorbei. Er fragt Sie, ob Sie schon mitbekommen haben, dass die Nachbarn sich scheiden lassen. Sie haben davon aber noch nichts gehört. Könnten Sie in dieser Situation folgenden Satz sagen: <br> 'Da weiß ich noch nichts von.'";
-  quest[3] = "Sie möchten Ausdrücken, dass sie den Lohn ihrer Arbeit mit niemandem teilen möchten. Können Sie in dieser Situation folgenden Satz sagen: <br> 'Das Geld, wo ich verdiene, gehört mir.'";
+  quest[3] = "Sie möchten ausdrücken, dass sie den Lohn ihrer Arbeit mit niemandem teilen möchten. Können Sie in dieser Situation folgenden Satz sagen: <br> 'Das Geld, wo ich verdiene, gehört mir.'";
   quest[4] = "Ihre Enkelin hat Sie schon lange nicht mehr besucht. Können Sie sie folgendes fragen: <br> 'Wann kommst du denn mal wieder bei mich?'";
   quest[5] = "Ist es für Sie möglich, Frauen mit dem neutralen Geschlecht zu bezeichnen? Stellen Sie sich vor, sie sprechen über ihre Schwester Petra. Können Sie über sie folgenden Satz sagen: <br> 'Es ist 75 Jahre alt.'";
   quest[6] = "Sie haben viele antike Sachen, die Sie auf dem Trödelmarkt verkaufen wollen. Leider ist das Wetter schlecht und die Aktion ein echter Reinfall.  Wenn Sie Ihrem Nachbarn später davon erzählen, können Sie dann folgenden Satz verwenden: <br> 'Wir haben lange gewartet, aber keines ist gekommen.'";

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Bulgarian dialect data</title>
+		<script type="text/javascript" src="js/d3.v3.js"></script>
+		<script type="text/javascript" src="data/hessen_boundaries.js"></script>
+		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />   
+    <script type="text/javascript" language="javascript" src="data/databin.js"></script>
+    <script type="text/javascript" language="javascript" src="js/script.js"></script>
+  </head>
+  <body>
+				
+
+        
+            
+  <div id="wrapper">
+    <div id="header">Hessen Dialekterkenner</div>
+    
+    <div id="center"><div id="squeeze">
+      <div class="right-corner">
+      <div class="left-corner">
+        
+    <div id="contents">
+    
+    <div id="formular">
+      
+    <form action="" id="form1" name="form1" onsubmit="nextStep(); return false">
+    <fieldset id="set1">
+      <legend id="leg">Frage <span id="fragennummer"></span>: </legend>
+  <p id="question"></p>
+  <p>
+    <input type="radio" name="antwort1" value="ja"> Ja<br>
+    <input type="radio" name="antwort1" value="nein"> Nein <br>
+    
+    <p id="alerttext">&nbsp;</p>
+    <input type="submit" value=" Antwort absenden ">
+    <input type="reset" value=" Neu starten" onclick="restart();">
+    </fieldset>
+  </p>
+</form>
+    
+
+
+    <fieldset>
+      <legend>Alle Fragen:</legend>
+    <table border="0" id="results"></table>
+    </fieldset><br><br>
+    
+    
+      <div id="infotext">&nbsp;</div>
+    <br>
+      
+  </div>
+   
+   <script type="text/javascript">
+     showResults();
+   </script>
+    <div id="map"></div>
+    
+   
+  <div id="information">
+   <div style="position:relative;top:10px;right: 10px; width: 500px; font-size:14px;">
+            <label for="voronoi">Voronoi anzeigen</label> <input type="checkbox" id="voronoi">  <br>
+            <label for="voronoi">Orte anzeigen</label> <input type="checkbox" id="locations"> <br>
+        </div>
+        <br><br>
+    &copy; 2012 Michael Cysouw, J&uuml;rg Fleischer, Stephanie Leser, Thomas
+    Mayer<br>
+    <a href="http://www.hmwk.hessen.de/irj/HMWK_Internet?cid=a2396939885f8c8c0a3ba39bda517cbd">
+      Landesprogramm LOEWE</a><br> <a href="http://www.syhd.info/">Syntax hessischer
+      Dialekte (SyHD)</a>
+      
+     
+    
+  </div>
+          
+  
+  </div>
+  
+    </div>
+    </div>
+    </div>
+    </div>
+  <!--
+     <script type="text/javascript">
+     displayLoc();
+   </script>
+  -->
+  </div>
+  
+
+        
+<script type="text/javascript">
+
+    
+    showQuestion(1);
+    
+    var data = [];
+    var polygons;
+
+    //Width and height
+    var w = 400;
+    var h = 570;
+
+    //Define map projection
+    var projection = d3.geo.mercator()
+                           .center([10.8, 50.70])
+                           .scale([11200 * 5]);
+
+    //Define path generator
+    var path = d3.geo.path()
+                     .projection(projection);
+
+    //Create SVG element
+    var svg = d3.select("#map")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h)
+                ;
+        
+    var polys = svg.append("svg:g")
+        .attr("id","polys")
+        ;
+        
+    var circles = svg.append("svg:g")
+        .attr("id", "circles")
+        ;
+    
+    var cells = svg.append("svg:g")
+        .attr("id", "cells")
+        .attr("pointer-events",'none')
+        ;
+        
+    var states = svg.append("svg:g")
+        .attr("id", "states")
+        ;
+        
+    d3.select("#voronoi").on("change", function() {
+      cells.classed("voronoi", this.checked);
+    });
+    
+    d3.select("#locations").on("change", function() {
+        var locationopacity = this.checked ? 1 : 0;
+        var locationpointer = this.checked ? 'all' : 'none';
+        //console.log(locationopacity);
+      d3.selectAll('.location')
+        .style("opacity",locationopacity)
+        .attr('pointer-events', locationpointer)
+        ;
+    });
+
+    //Load in GeoJSON data
+    d3.json("data/3_mittel-kreise-hessen.geojson", function(json) {
+        
+        //Bind data and create one path per GeoJSON feature
+        states.selectAll("path")
+           .data(json.features)
+           .enter()
+           .append("path")
+           .attr("d", path)
+           .style("fill", "none")
+           .style("stroke","#606060")
+           .style("stroke-width","0.2px")
+        .attr('pointer-events','none')
+           ;
+           
+            d3.csv("data/points_hessen.csv", function(inputdata) {
+                
+                // get the positions and polygons for the voronoi
+                data = inputdata;
+                //console.log(data);
+                positions = [];
+                data.forEach(function(a){
+                   positions.push(projection([a.lon,a.lat])); 
+                });
+                
+                circles.selectAll("circle")
+                     .data(data)
+                     .enter()
+                     .append("circle")
+                     .attr('class','location')
+                     .attr("cx", function(d) {
+                         return projection([d.lon, d.lat])[0];
+                     })
+                     .attr("cy", function(d) {
+                         return projection([d.lon, d.lat])[1];
+                     })
+                     .attr("r", 4)
+                     .attr('pointer-events','none')
+                     .style("fill", "steelblue")
+                     .style("stroke","white")
+                     .style("stroke-weight",3)
+                     .style("opacity", 0)
+                     .style('cursor','pointer')
+                     .append("title")
+                     .text(function(d){
+                                return d.name;
+                        })
+                      ;
+                
+                
+                polygons = d3.geom.voronoi(positions);
+                
+                
+                var hesse = [];
+                hessen.forEach(function(a){
+                    //parts = a.split(';').reverse()
+                    parts = a;
+                    hesse.push(projection(parts));
+                    //hesse.push(parts);
+                });
+                
+                //console.log(hesse);
+                
+                var hesse_poly = d3.geom.polygon(hesse);
+
+                //console.log(polygons);
+
+                // plot the voronoi polygons
+                
+                var g = cells.selectAll("g")
+                    .data(data)
+                  .enter().append("svg:g");
+                 
+                g.append("svg:path")
+                      .attr("class", "cell")
+                      .attr("d", function(d, i) { return "M" + polygons[i].join("L") + "Z"; })
+                      .attr('pointer-events','none')
+                      ;
+                      
+                // make the clipped polygons
+                      
+                // plot the voronoi polygons 
+                polys.selectAll('polygon')
+                    .data(polygons)
+                    .enter()
+                    .append("polygon")
+                    .attr('class',function(d,i){return 'poly poly_' + i;})
+                    .attr("points",function(d,i) { 
+                        var currHesse = hesse.slice(0);
+                        var hesse_poly = d3.geom.polygon(currHesse);
+                        var currPoly = d3.geom.polygon(d).clip(hesse_poly);
+                        console.log(currPoly.map(function(m){
+                          return [m[0],m[1]].join(',');
+                        }).join(" "));
+                        return currPoly.map(function(m){
+                        //return d.map(function(m){
+                            return [m[0],m[1]].join(',');
+                        }).join(" ");
+                    })
+                    //.attr("fill",'green')
+                    .attr("fill",function(d,i){
+                        //console.log(data[i].dim1,data[i].dim2);
+                        //console.log(dim1scale(data[i].dim1));
+                        return "FireBrick";
+                    })
+                    .style("cursor","pointer")
+                    .style('opacity',0)//function(d,i){return (156-i)/156;})
+                    .on("mouseover",function(d,i){
+                        
+                        tooltip.show(data[i].name + " (" + (i+1) + ") [" + 100 + "%]");
+                    })
+                    .on("mouseout",function(d,i){
+                        tooltip.hide();
+                    })
+                    ;
+
+                    // make a black border around the Hesse area
+                polys.selectAll('polygon2')
+                    .data([hesse])
+                    .enter()
+                    .append("polygon")
+                    .attr("points",function(d,i) { 
+                        //console.log(d);
+                        return d.map(function(m){
+                            return [m[0],m[1]].join(',');
+                        }).join(" ");
+                    })
+                    .attr('fill','none')
+                    .attr("stroke","black")
+                    .attr("stroke-width",1)
+                    ;
+                            
+            });							
+              
+    });
+
+			
+// taken from http://philmap.000space.com/gmap-api/poly-hov.html
+
+var tooltip=function(){
+	var id = 'tt';
+	var top = 3;
+	var left = 3;
+	var maxw = 300;
+	var speed = 10;
+	var timer = 20;
+	var endalpha = 95;
+	var alpha = 0;
+	var tt,t,c,b,h;
+	var ie = document.all ? true : false;
+  tt = document.getElementById("tt");
+	return{
+		show:function(v,w){
+			if(tt == null){
+				tt = document.createElement('div');
+				tt.setAttribute('id',id);
+				t = document.createElement('div');
+				t.setAttribute('id',id + 'top');
+				c = document.createElement('div');
+				c.setAttribute('id',id + 'cont');
+				b = document.createElement('div');
+				b.setAttribute('id',id + 'bot');
+				tt.appendChild(t);
+				tt.appendChild(c);
+				tt.appendChild(b);
+				document.body.appendChild(tt);
+				tt.style.opacity = 0;
+				tt.style.filter = 'alpha(opacity=0)';
+				document.onmousemove = this.pos;
+			}
+			tt.style.display = 'block';
+			c.innerHTML = v;
+			tt.style.width = w ? w + 'px' : 'auto';
+			if(!w && ie){
+				t.style.display = 'none';
+				b.style.display = 'none';
+				tt.style.width = tt.offsetWidth;
+				t.style.display = 'block';
+				b.style.display = 'block';
+			}
+			if(tt.offsetWidth > maxw){tt.style.width = maxw + 'px'}
+			h = parseInt(tt.offsetHeight) + top;
+			clearInterval(tt.timer);
+			tt.timer = setInterval(function(){tooltip.fade(1)},timer);
+		},
+		pos:function(e){
+			var u = ie ? event.clientY + document.documentElement.scrollTop : e.pageY;
+			var l = ie ? event.clientX + document.documentElement.scrollLeft : e.pageX;
+			tt.style.top = (u - h) + 'px';
+			tt.style.left = (l + left) + 'px';
+		},
+		fade:function(d){
+			var a = alpha;
+			if((a != endalpha && d == 1) || (a != 0 && d == -1)){
+				var i = speed;
+				if(endalpha - a < speed && d == 1){
+					i = endalpha - a;
+				}else if(alpha < speed && d == -1){
+					i = a;
+				}
+				alpha = a + (i * d);
+				tt.style.opacity = alpha * .01;
+				tt.style.filter = 'alpha(opacity=' + alpha + ')';
+			}else{
+				clearInterval(tt.timer);
+				if(d == -1){tt.style.display = 'none'}
+			}
+		},
+		hide:function(){
+			clearInterval(tt.timer);
+			tt.timer = setInterval(function(){tooltip.fade(-1)},timer);
+		}
+	};
+}();    
+
+</script>
+
+
+
+</body>
+</html>
