@@ -34,17 +34,15 @@ var data = [];
 var polygons;
 
 //Width and height
-var w = 400;
-var h = 570;
+var w = parseInt(d3.select('#map').style('width')) - 20;
+if (w > 400) {
+    w = 400;
+}
+var h = w * 1.3;
+console.log(w,h);
 
-//Define map projection
-var projection = d3.geo.mercator()
-                       .center([11, 50.6])
-                       .scale([52000]);
 
-//Define path generator
-var path = d3.geo.path()
-                 .projection(projection);
+
 
 //Create SVG element
 var svg = d3.select("#map")
@@ -81,7 +79,12 @@ var features;
 
 var proj = d3.geo.mercator()
                        .center([11, 50.6])
-                       .scale([52000]);
+                       .translate([w / 0.9 , h / 2])
+                       .scale([w * 120]);
+                       
+//Define path generator
+var path = d3.geo.path()
+                 .projection(proj);
 
 
  
@@ -392,7 +395,7 @@ function updateMap(){
             .transition()
             .duration(1000)
             .style("opacity",function(d,i){
-                console.log(d);
+                //console.log(d);
                 var resValue = resultVector[i];
                 //console.log(resValue);
                 var resValueOrig = resValue/max;
@@ -405,6 +408,24 @@ function updateMap(){
                 }
                 return 1-resValue;
             })
+            .style("fill",function(d,i){
+                //console.log(maxLoc);
+                var resValue = resultVector[i];
+                //console.log(resValue);
+                var resValueOrig = resValue/max;
+                //resValue = resValueOrig * 0.75;
+                if(nrAntworten == nrQuestions){
+                    if(maxLocString.indexOf("#" + i + "#") != -1){
+                        minValue = resValueOrig;
+                        //console.log("if2: ", minValue);
+                        return "green";
+                    }
+                    else {
+                        return "FireBrick";
+                    }
+                }
+                return "FireBrick";
+             })
 		    .attr("d", carto.path)
             ;
     }
@@ -428,7 +449,7 @@ function updateMap(){
             .transition()
             .duration(1000)
             .style("opacity",function(d,i){
-                console.log(d);
+                //console.log(d);
                 var resValue = resultVector[i];
                 //console.log(resValue);
                 var resValueOrig = resValue/max;
@@ -441,6 +462,24 @@ function updateMap(){
                 }
                 return 1-resValue;
             })
+            .style("fill",function(d,i){
+                //console.log(maxLoc);
+                var resValue = resultVector[i];
+                //console.log(resValue);
+                var resValueOrig = resValue/max;
+                //resValue = resValueOrig * 0.75;
+                if(nrAntworten == nrQuestions){
+                    if(maxLocString.indexOf("#" + i + "#") != -1){
+                        minValue = resValueOrig;
+                        //console.log("if2: ", minValue);
+                        return "green";
+                    }
+                    else {
+                        return "FireBrick";
+                    }
+                }
+                return "FireBrick";
+             })
             ;
     }
 
